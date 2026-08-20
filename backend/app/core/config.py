@@ -26,6 +26,12 @@ class Settings(BaseSettings):
 
     # --- Vector store ---
     VECTOR_STORE_PROVIDER: Literal["chroma", "pinecone", "qdrant"] = "chroma"
+    # If CHROMA_HOST is set, ChromaVectorStore connects to that server over
+    # HTTP instead of using a local PersistentClient — required whenever
+    # more than one process/container needs to see the same embeddings
+    # (e.g. ingestion from a worker, queries from the API).
+    CHROMA_HOST: str | None = None
+    CHROMA_PORT: int = 8000
     CHROMA_PERSIST_DIR: str = "./chroma_data"
     CHROMA_COLLECTION_NAME: str = "sentivest_documents"
     PINECONE_API_KEY: str | None = None

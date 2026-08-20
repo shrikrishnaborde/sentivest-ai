@@ -45,13 +45,23 @@ class VectorStore(ABC):
 
 
 class ChromaVectorStore(VectorStore):
-    """Local/dev-friendly persistent vector store backed by ChromaDB."""
+    """Vector store backed by ChromaDB.
+
+    Connects to a standalone Chroma server over HTTP when `CHROMA_HOST` is
+    set — required whenever more than one process/container needs to see
+    the same embeddings (e.g. a Celery worker ingesting documents that the
+    API process then has to retrieve). Falls back to an on-disk
+    PersistentClient for single-process local/offline dev.
+    """
 
     def __init__(self):
         import chromadb
 
         settings = get_settings()
-        self._client = chromadb.PersistentClient(path=settings.CHROMA_PERSIST_DIR)
+        if settings.CHROMA_HOST:
+            self._client = chromadb.HttpClient(host=settings.CHROMA_HOST, port=settings.CHROMA_PORT)
+        else:
+            self._client = chromadb.PersistentClient(path=settings.CHROMA_PERSIST_DIR)
         self._collection = self._client.get_or_create_collection(
             name=settings.CHROMA_COLLECTION_NAME,
             metadata={"hnsw:space": "cosine"},
