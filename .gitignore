@@ -1,0 +1,43 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+*.log
+
+# --- Node / Next.js ---
+node_modules/
+.next/
+out/
+frontend/dist/
+.turbo/
+*.tsbuildinfo
+
+# --- Env & secrets ---
+.env
+.env.*
+!.env.example
+!.env.local.example
+
+# --- Vector store / data ---
+backend/chroma_data/
+backend/data/raw/
+backend/data/processed/
+backend/dev.db
+
+# --- IDE / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Docker ---
+*.pid
